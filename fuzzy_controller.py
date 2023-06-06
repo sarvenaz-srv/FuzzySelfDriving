@@ -15,6 +15,7 @@ class FuzzyController:
         left_membership = self.fuzzification(left_dist) # [left_close, left_moderate, left_far]
         right_membership = self.fuzzification(right_dist) # [right_close, right_moderate, right_far]
         
+        output_membership = self.inference(left_membership, right_membership)
         
         return 0
     
@@ -42,4 +43,24 @@ class FuzzyController:
         
         return membership
 
-    
+    def inference(self, left_membership, right_membership):
+        # returns rotate fuzzy membership as a list, having right and left distance fuzzy memberships
+        # returns [high_right, low_right, nothing, low_left, high_left]
+        membership = []
+        
+        high_right = min(left_membership[0], right_membership[2])
+        membership.append(high_right)
+        
+        low_right = min(left_membership[0], right_membership[1])
+        membership.append(low_right)
+        
+        nothing = min(left_membership[1], right_membership[1])
+        membership.append(nothing)
+        
+        low_left = min(left_membership[1], right_membership[0])
+        membership.append(low_left)
+        
+        high_left = min(left_membership[2], right_membership[0])
+        membership.append(high_left)
+        
+        return membership
